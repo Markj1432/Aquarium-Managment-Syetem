@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Temperature Monitor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #010104;
+            color: #e7e7f6;
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        h1 {
+            color: #e7e7f6;
+            margin-bottom: 20px;
+        }
+
+        #temperature {
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        #colorBox {
+            width: 50px;
+            height: 50px;
+            background-color: white;
+            transition: background-color 0.5s ease;
+            border-radius: 10px; /* Rounded corners */
+        }
+
+        /* Additional styles */
+        .container {
+            text-align: center;
+            background-color: #702B76;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .info-text {
+            background-color: #9699D9;
+            color: #010104;
+            padding: 10px;
+            margin-top: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .accent-text {
+            color: #c45ca2;
+        }
+    </style>
+    <script>
+        function updateData() { // Renamed the function for clarity
+            fetch('/temperature')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('temperature').innerText = data.last_temp + " °C";
+                    document.getElementById('humidity').innerText = data.last_humidity + " %";
+                    document.getElementById('soil-moisture').innerText = data.last_soil_moisture + " %";
+
+                    // ... (rest of your color changing logic) ...
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        }
+
+        setInterval(updateData, 500); 
+</script>
+</head>
+<body>
+    <div class="container">
+        <h1>Sensor Readings:</h1>
+        <div>Temperature: <span id="temperature" class="accent-text">Loading...</span></div> 
+        <div>Humidity: <span id="humidity" class="accent-text">Loading...</span></div> 
+        <div>Soil Moisture: <span id="soil-moisture" class="accent-text">Loading...</span></div> 
+        <div id="colorBox"></div>
+        <div class="info-text">Sensor data is updated every 500 milliseconds.</div> 
+    </div>
+</body>
+</html>
